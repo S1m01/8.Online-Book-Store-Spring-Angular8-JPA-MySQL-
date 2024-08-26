@@ -118,6 +118,8 @@ export class ShopbookComponent implements OnInit {
   }
 
   onSearch() {
+    this.pagination = 0;
+    this.totalItems = 0;
     this.books = [];
     this.httpClientService.getSearchBooks(this.searchForm.controls.search.value).subscribe({
       next: (data: any) => {
