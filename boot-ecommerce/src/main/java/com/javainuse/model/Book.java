@@ -1,9 +1,14 @@
 package com.javainuse.model;
 
+import java.util.Set;
+
+import org.springframework.data.jpa.repository.Query;
+
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "book")
+@NamedQuery(name = "Book.FindByNameOrAuthor", query = "SELECT b FROM Book b WHERE LOWER(b.name) LIKE LOWER(CONCAT('%', :keyword, '%')) OR LOWER(b.author) LIKE LOWER(CONCAT('%', :keyword, '%'))")
 public class Book {
 
 	@Id
@@ -16,12 +21,15 @@ public class Book {
 
 	@Column(name = "author")
 	private String author;
-	
+
 	@Column(name = "price")
 	private String price;
 
 	@Column(name = "picByte", length = 100000)
 	private byte[] picByte;
+
+	//@OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+	//private Set<BookUser> bookUsers;
 
 	public Long getId() {
 		return id;
@@ -62,4 +70,12 @@ public class Book {
 	public void setPicByte(byte[] picByte) {
 		this.picByte = picByte;
 	}
+/*
+	public Set<BookUser> getBookUsers() {
+		return bookUsers;
+	}
+
+	public void setBookUsers(Set<BookUser> bookUsers) {
+		this.bookUsers = bookUsers;
+	}*/
 }

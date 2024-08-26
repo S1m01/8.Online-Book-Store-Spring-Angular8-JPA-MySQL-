@@ -1,10 +1,14 @@
 package com.javainuse.model;
 
+import java.util.Set;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -24,6 +28,9 @@ public class User {
 
 	@Column(name = "type")
 	private String type;
+
+	//@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+	//private Set<BookUser> bookUsers;
 
 	public Long getId() {
 		return id;
@@ -56,5 +63,13 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+/*
+	public Set<BookUser> getBookUsers() {
+		return bookUsers;
+	}
 
+	public void setBookUsers(Set<BookUser> bookUsers) {
+		this.bookUsers = bookUsers;
+	}
+*/
 }

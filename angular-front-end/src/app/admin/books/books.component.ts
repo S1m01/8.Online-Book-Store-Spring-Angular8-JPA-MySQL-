@@ -20,10 +20,10 @@ export class BooksComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit() {
-    this.refreshData();
+    //this.refreshData();
   }
 
-  refreshData() {
+  /*refreshData() {
     this.httpClientService.getBooks().subscribe(
       response => this.handleSuccessfulResponse(response)
     );
@@ -43,7 +43,7 @@ export class BooksComponent implements OnInit {
         }
       }
     );
-  }
+  }*/
 
   // we will be taking the books response returned from the database
   // and we will be adding the retrieved   

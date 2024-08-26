@@ -6,4 +6,5 @@ export class Book {
     picByte: string;   
     retrievedImage: string; 
     isAdded: boolean;
+    quantity: number;
     }

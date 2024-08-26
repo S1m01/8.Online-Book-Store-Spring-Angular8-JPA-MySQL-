@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { User } from '../model/User ';
 import { Book } from '../model/Book';
 
@@ -18,6 +18,12 @@ export class HttpClientService {
     return this.httpClient.get<User[]>('http://localhost:8080/users/get');
   }
 
+  getSearchBooks(search)
+  {
+    console.log("test search book");
+    return this.httpClient.get<any>(`http://localhost:8080/books/search?keyword=${search}`);
+  }
+
   addUser(newUser: User) {
     return this.httpClient.post<User>('http://localhost:8080/users/add', newUser);   
   }
@@ -26,8 +32,8 @@ export class HttpClientService {
     return this.httpClient.delete<User>('http://localhost:8080/users/' + id);
   }
 
-  getBooks() {
-    return this.httpClient.get<Book[]>('http://localhost:8080/books/get');
+  getBooks(params: any) {
+    return this.httpClient.get<Book[]>('http://localhost:8080/books/get', {params});
   }
 
   addBook(newBook: Book) {
