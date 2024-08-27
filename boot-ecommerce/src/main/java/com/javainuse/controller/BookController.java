@@ -38,9 +38,6 @@ public class BookController {
 	@Autowired
 	private BookRepository bookRepository;
 	
-	//@Autowired
-	//private BookUserRepository bookUserRepository;
-	
 	@GetMapping("/get")
 	public ResponseEntity<Object> getBooks( @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size,
@@ -99,21 +96,4 @@ public class BookController {
 	public void updateBook(@RequestBody Book book) {
 		bookRepository.save(book);
 	}
-	
-	/*@PostMapping("/{orderId}/products/{productId}")
-    public ResponseEntity<String> addBookToUser(
-            @PathVariable Long userId,
-            @PathVariable Long bookId,
-            @RequestParam(name = "quantity", required = false) Integer quantity) {
-
-        try {
-            // Chiama il servizio per aggiungere il prodotto all'ordine
-        	bookUserRepository.addBookToUser(userId, bookId, quantity);
-            return new ResponseEntity<>(null ,HttpStatus.CREATED);
-
-        } catch (Exception e) {
-            // Gestisce altri tipi di eccezioni
-        	throw new RuntimeException("Error in connecting the product to the order", e);
-        }
-    }*/
 }

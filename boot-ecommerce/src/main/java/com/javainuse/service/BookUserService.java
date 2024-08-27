@@ -1,5 +1,5 @@
 package com.javainuse.service;
-/*
+
 import com.javainuse.db.BookRepository;
 import com.javainuse.db.UserRepository;
 import com.javainuse.model.Book;
@@ -22,18 +22,17 @@ public class BookUserService {
     @Autowired
     private UserRepository userRepository;
 
-    public BookUser addBookUser(Long bookId, Long userId, Integer quantity) {
+    /*public BookUser addBookUser(Long bookId, Long userId, Integer quantity) {
         // Fetch the book and user from their repositories
-        Book book = bookRepository.findById(bookId)
+        bookRepository.findById(bookId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid book ID: " + bookId));
-        User user = userRepository.findById(userId)
+        userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid user ID: " + userId));
 
         // Create a new BookUser instance
-        BookUser bookUser = new BookUser(user,book, quantity);
+        BookUser bookUser = new BookUser(bookId, userId, quantity);
 
         // Save the BookUser entity to the repository
         return bookUserRepository.save(bookUser);
-    }
+    }*/
 }
-*/

@@ -28,9 +28,6 @@ public class Book {
 	@Column(name = "picByte", length = 100000)
 	private byte[] picByte;
 
-	//@OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
-	//private Set<BookUser> bookUsers;
-
 	public Long getId() {
 		return id;
 	}
@@ -70,12 +67,4 @@ public class Book {
 	public void setPicByte(byte[] picByte) {
 		this.picByte = picByte;
 	}
-/*
-	public Set<BookUser> getBookUsers() {
-		return bookUsers;
-	}
-
-	public void setBookUsers(Set<BookUser> bookUsers) {
-		this.bookUsers = bookUsers;
-	}*/
 }

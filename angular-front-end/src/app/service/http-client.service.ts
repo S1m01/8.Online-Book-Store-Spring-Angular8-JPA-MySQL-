@@ -28,6 +28,15 @@ export class HttpClientService {
     return this.httpClient.post<User>('http://localhost:8080/users/add', newUser);   
   }
 
+  /*addBookUser(params: any) {
+    return this.httpClient.post<any>('http://localhost:8080/user-books/add', {params});   
+  }*/
+
+  addBookUser(userId, bookId, quantity) {
+    const headers = { 'content-type': 'application/json' }
+    return this.httpClient.post<any>(`http://localhost:8080/user-books/add?userId=${userId}&bookId=${bookId}&quantity=${quantity}`, {headers});   
+  }
+
   deleteUser(id) {
     return this.httpClient.delete<User>('http://localhost:8080/users/' + id);
   }

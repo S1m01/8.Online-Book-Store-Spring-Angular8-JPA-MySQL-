@@ -29,9 +29,6 @@ public class User {
 	@Column(name = "type")
 	private String type;
 
-	//@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-	//private Set<BookUser> bookUsers;
-
 	public Long getId() {
 		return id;
 	}
@@ -63,13 +60,4 @@ public class User {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-/*
-	public Set<BookUser> getBookUsers() {
-		return bookUsers;
-	}
-
-	public void setBookUsers(Set<BookUser> bookUsers) {
-		this.bookUsers = bookUsers;
-	}
-*/
 }

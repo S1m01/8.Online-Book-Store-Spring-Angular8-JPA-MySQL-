@@ -7,6 +7,9 @@
                     <label for="search" class="col-sm-1 col-form-label">Cerca</label>
                     <div class="col-sm-10">
                         <input type="text" formControlName="search" placeholder="title and author">
+                        <div class="input-group-append">
+                            
+                        </div>
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary">Search Books</button>
@@ -14,6 +17,10 @@
             </form>
         </div>
     </div>
+    <!-- Messaggio di avviso se la ricerca non produce risultati 
+    <div *ngIf="books.length === 0 && searchKeyword" class="alert alert-info mt-4 text-center">
+        No Books or Authors found matching "{{ searchKeyword }}".
+    </div>-->
 </div>
 <br>
 
@@ -24,59 +31,64 @@
 
 <!-- CARRELLO -->
 <div class="container my-4">
-    <div class="row">
-        <div class="col-md-2">
+    <div class="row align-items-center">
+        <div class="col-md-8">
             <h1 class="h3">Books</h1>
         </div>
-        <div class="col-md-10">
-            <div class="d-flex justify-content-end">
-                <div class="dropdown">
-                    <!-- Updated Dropdown Button -->
-                    <button class="btn btn-info btn-lg dropdown-toggle" type="button" id="cartDropdown"
-                        [attr.data-toggle]="cartBooks.length > 0 ? 'dropdown' : null" aria-expanded="false"
-                        [disabled]="cartBooks.length === 0">
-                        <span class="fa fa-shopping-cart"></span>
-                        Books Added In Cart: <span class="badge badge-light">{{cartBooks.length}}</span>
-                    </button>
-                    <div class="dropdown-menu dropdown-menu-right p-3" aria-labelledby="cartDropdown"
-                        style="min-width: 400px;" *ngIf="cartBooks.length > 0">
-                        <div *ngFor="let item of cartBooks; let i = index" class="dropdown-item">
-                            <div class="row align-items-center">
-                                <div class="col-6">
-                                    <!-- Updated Image Display -->
-                                    <img [src]="item.retrievedImage" alt="{{ item.name }}" class="img-fluid"
-                                        style="max-height: 60px; object-fit: cover;">
+        <div class="col-md-4 d-flex justify-content-end">
+            <div class="dropdown">
+                <button class="btn btn-info btn-lg dropdown-toggle" type="button" id="cartDropdown"
+                    data-toggle="dropdown" aria-expanded="false">
+                    <span class="fa fa-shopping-cart mr-2"></span>
+                    Books in Cart: <span class="badge badge-light">{{cartBooks.length}}</span>
+                </button>
+                <div class="dropdown-menu dropdown-menu-right p-3" aria-labelledby="cartDropdown"
+                    style="min-width: 400px;">
+                    <!-- Verifica se il carrello è vuoto -->
+                    <div *ngIf="cartBooks.length === 0" class="alert alert-warning text-center">
+                        <span>Your cart is empty.</span>
+                    </div>
+                    <!-- Mostra i libri nel carrello se non è vuoto -->
+                    <div *ngIf="cartBooks.length > 0">
+                        <div *ngFor="let item of cartBooks" class="dropdown-item p-0">
+                            <div class="d-flex align-items-center justify-content-between py-2">
+                                <!-- Immagine del libro -->
+                                <div class="mr-2">
+                                    <img [src]="item.retrievedImage" alt="{{item.name}}" height="50" width="35">
                                 </div>
                                 <!-- Nome del libro con troncamento -->
-                                <div class="col-6">
-                                    <span>{{ item.name && item.name.length > 10 ? (item.name | slice:0:10) + '...' :
-                                        item.name }}</span>
+                                <div class="mr-2">
+                                    <span>{{ item.name.length > 15 ? (item.name | slice:0:15) + '...' : item.name
+                                        }}</span>
                                 </div>
                                 <!-- Quantità -->
-                                <div class="col-3">
-                                    <input type="number" class="form-control form-control-sm"
-                                        [(ngModel)]="item.quantity" min="1" style="width: 60px;" [value]="1">
+                                <div class="mr-2">
+                                    <input type="number" class="form-control form-control-sm text-center"
+                                        [(ngModel)]="item.quantity" min="1">
                                 </div>
                                 <!-- Prezzo -->
-                                <div class="col-3 text-right">
+                                <div class="mr-2">
                                     <strong>${{item.price * item.quantity | number:'1.2-2'}}</strong>
                                 </div>
-                                <!-- Pulsante di eliminazione -->
-                                <div class="col-12 text-right mt-2">
-                                    <button class="btn btn-danger btn-sm" (click)="removeBook(item)">Remove</button>
-                                </div>
+                                <!-- Pulsante di rimozione -->
+                                <button class="btn btn-danger btn-sm" (click)="removeFromCart(item)">
+                                    <img src="assets/img/trash.png" alt="Trash" style="width: 20px; height: auto;">
+                                </button>
                             </div>
                         </div>
                         <div class="dropdown-divider"></div>
-                        <button class="btn btn-success btn-block mb-2" (click)="goToCart()">View Cart</button>
-                        <button *ngIf="cartBooks.length > 0" class="btn btn-warning btn-block"
-                            (click)="emptyCart()">Empty Cart</button>
+                        <div class="d-flex flex-column">
+                            <button class="btn btn-success mb-2" (click)="goToCart()">View Cart: <strong>${{ totalPrice
+                                    | number:'1.2-2' }}</strong></button>
+                            <button class="btn btn-warning" (click)="emptyCart()">Empty Cart</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
 
 
 <!-- LISTA LIBRI -->
@@ -92,7 +104,8 @@
 
                 <!-- Dropdown per selezionare l'ordinamento -->
                 <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="orderDropdown" data-toggle="dropdown" aria-expanded="false">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="orderDropdown"
+                        data-toggle="dropdown" aria-expanded="false">
                         Order by: {{ sortField }}
                     </button>
                     <div class="dropdown-menu" aria-labelledby="orderDropdown">
@@ -112,7 +125,8 @@
                     style="height: 300px; width: 200px;">
                 <div class="card-body text-center">
                     <h5 class="card-title">
-                        {{ book?.name && book.name.length > 20 ? (book.name | slice:0:20) + '...' : book?.name || 'No Title' }}
+                        {{ book?.name && book.name.length > 20 ? (book.name | slice:0:20) + '...' : book?.name || 'No
+                        Title' }}
                     </h5>
                     <p class="card-text"><strong>${{book.price}}</strong></p>
                     <p class="card-text">{{book.author}}</p>

@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FeedBack } from '../model/FeedBack'; 
 import { Book } from 'src/app/model/Book';
+import { HttpParams } from '@angular/common/http';
+import { HttpClientService } from '../service/http-client.service';
 
 @Component({
   selector: 'app-cart',
@@ -13,7 +15,7 @@ export class CartListComponent implements OnInit {
   feedback = new FeedBack("", "");
   paymentInProgress: boolean = false;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private httpClientService: HttpClientService) { }
 
   ngOnInit() {
     // Recupera i dati del carrello dal localStorage
@@ -42,10 +44,37 @@ export class CartListComponent implements OnInit {
 
   // Procede al checkout o ad altre azioni
   proceedToCheckout() {
+    this.bookUserOrder();
     this.paymentInProgress = true;
     this.feedback = {
       feedbackType: "success",
       feedbackmsg: "Payment successful!",
     };
+  }
+
+  bookUserOrder(){
+    let userId = 1;
+    this.cartBooks.forEach((cartItem: any) => {
+      /*let params = new HttpParams;
+    
+      params = params.append('quantity', cartItem.quantity.toString());
+      params = params.append('userId', ""+userId);
+      params = params.append('bookId', cartItem.id.toString());*/
+
+      this.httpClientService.addBookUser(userId, cartItem.id.toString(), cartItem.quantity.toString()).subscribe({
+          next: (data: any) => {
+              console.log('Order book added successfully');
+          },
+          error: (err: any) => {
+              console.error('Error occurred:', err);
+              this.feedback = {
+                  feedbackType: err.feedbackType,
+                  feedbackmsg: err.feedbackmsg,
+              };
+          },
+          complete: () => {
+          },
+      });
+  });
   }
 }
