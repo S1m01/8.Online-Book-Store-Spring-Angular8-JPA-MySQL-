@@ -6,40 +6,41 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import com.javainuse.db.BookOrderRepository;
 import com.javainuse.db.BookRepository;
-import com.javainuse.db.BookUserRepository;
-import com.javainuse.db.UserRepository;
+import com.javainuse.db.OrderRepository;
 import com.javainuse.model.Book;
-import com.javainuse.model.BookUser;
-import com.javainuse.model.User;
+import com.javainuse.model.Order;
+import com.javainuse.model.OrderBook;
 
 import java.util.List;
 import java.util.Optional;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
-@RequestMapping("/user-books")
-public class BookUserController {
+@RequestMapping("/order-books")
+public class BookOrderController {
 
     @Autowired
-    private BookUserRepository userBookRepository;
+    private BookOrderRepository bookOrderRepository;
     
     @Autowired
 	private BookRepository bookRepository;
     
     @Autowired
-	private UserRepository userRepository;
+	private OrderRepository orderRepository;
 
     // Create a new UserBook with query parameters
     @PostMapping("/add")
     public ResponseEntity<?> createUserBook(
-            @RequestParam("userId") Long userId,
+            @RequestParam("orderId") Long orderId,
             @RequestParam("bookId") Long bookId,
-            @RequestParam("quantity") Integer quantity) {
+            @RequestParam("quantity") Integer quantity,
+            @RequestParam("price") Double price) {
 
         // Check if userId or bookId or quantity is null
-        if (userId == null || bookId == null || quantity == null) {
-            return ResponseEntity.badRequest().body("User ID, Book ID, and Quantity are required.");
+        if (orderId == null || bookId == null || quantity == null) {
+            return ResponseEntity.badRequest().body("Order ID, Book ID, and Quantity are required.");
         }
 
         // Check if quantity is less than 1
@@ -47,10 +48,10 @@ public class BookUserController {
             return ResponseEntity.badRequest().body("Quantity must be at least 1.");
         }
 
-        // Check if the user exists
-        Optional<User> userOptional = userRepository.findById(userId);
-        if (!userOptional.isPresent()) {
-            return ResponseEntity.badRequest().body("User not found.");
+        // Check if the order exists
+        Optional<Order> orderOptional = orderRepository.findById(orderId);
+        if (!orderOptional.isPresent()) {
+            return ResponseEntity.badRequest().body("Order not found.");
         }
 
         // Check if the book exists
@@ -60,17 +61,18 @@ public class BookUserController {
         }
 
         // Create a new BookUser object
-        BookUser userBook = new BookUser();
-        userBook.setUserId(userId);
-        userBook.setBookId(bookId);
-        userBook.setQuantity(quantity);
+        OrderBook orderBook = new OrderBook();
+        orderBook.setOrderId(orderId);
+        orderBook.setBookId(bookId);
+        orderBook.setQuantity(quantity);
+        orderBook.setPrice(price);
 
         try {
             // Save the new BookUser to the repository
-            BookUser savedUserBook = userBookRepository.save(userBook);
+        	OrderBook savedOrderBook = bookOrderRepository.save(orderBook);
 
             // Return the saved BookUser
-            return ResponseEntity.ok(savedUserBook);
+            return ResponseEntity.ok(savedOrderBook);
 
         } catch (DataAccessException e) {
             // Handle database exceptions
@@ -78,5 +80,4 @@ public class BookUserController {
                     .body("An error occurred while saving the user book: " + e.getMessage());
         }
     }
-
 }

@@ -1,36 +1,37 @@
 package com.javainuse.model;
 
 import jakarta.persistence.*;
-import java.io.Serializable;
-import java.util.Objects;
 
 @Entity
-@Table(name = "book_user")
-public class BookUser {
-    
+@Table(name = "order_book")
+public class OrderBook {
 
 	@Id
 	@Column(name = "id")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(name = "book_id")
-	private Long bookId;
+	@Column(name = "bookId")  
+    private Long bookId;
 
-	@Column(name = "user_id")
-	private Long userId;
+    @Column(name = "orderId") 
+    private Long orderId;
 
-	@Column(name = "qantity")
-	private Integer quantity;
-	
-	public BookUser() {
-	}
-	
-	public BookUser(Long book, Long user, Integer quantity) {
-		this.bookId = book;
-		this.userId = user;
-		this.quantity = quantity;
-	}
+    @Column(nullable = false)
+    private Integer quantity;
+    
+    @Column(name = "price")
+    private Double price;
+
+    public OrderBook() {
+    }
+
+    public OrderBook(Long orderId, Long bookId, Integer quantity, Double price) {
+        this.orderId = orderId;
+        this.bookId = bookId;
+        this.quantity = quantity;
+        this.price = price;
+    }
 
 	public Long getId() {
 		return id;
@@ -38,14 +39,6 @@ public class BookUser {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public Long getUserId() {
-		return userId;
-	}
-
-	public void setUserId(Long userId) {
-		this.userId = userId;
 	}
 
 	public Long getBookId() {
@@ -56,6 +49,14 @@ public class BookUser {
 		this.bookId = bookId;
 	}
 
+	public Long getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(Long orderId) {
+		this.orderId = orderId;
+	}
+
 	public Integer getQuantity() {
 		return quantity;
 	}
@@ -63,4 +64,19 @@ public class BookUser {
 	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
 	}
+
+	public Double getPrice() {
+		return price;
+	}
+
+	public void setPrice(Double price) {
+		this.price = price;
+	}
+
+	@Override
+	public String toString() {
+		return "OrderBook [id=" + id + ", bookId=" + bookId + ", orderId=" + orderId + ", quantity=" + quantity
+				+ ", price=" + price + "]";
+	}
+    
 }
