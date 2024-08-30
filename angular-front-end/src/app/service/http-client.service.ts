@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { User } from '../model/User ';
 import { Book } from '../model/Book';
+import { UserProfile } from '../model/UserProfile';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -28,13 +30,14 @@ export class HttpClientService {
     return this.httpClient.post<User>('http://localhost:8080/users/add', newUser);   
   }
 
-  /*addBookUser(params: any) {
-    return this.httpClient.post<any>('http://localhost:8080/user-books/add', {params});   
-  }*/
-
   addBookUser(userId, bookId, quantity) {
     const headers = { 'content-type': 'application/json' }
     return this.httpClient.post<any>(`http://localhost:8080/user-books/add?userId=${userId}&bookId=${bookId}&quantity=${quantity}`, {headers});   
+  }
+
+  updateUser(updatedUser: User, id: number): Observable<User> {
+    const body = JSON.stringify(updatedUser);
+    return this.httpClient.put<User>(`http://localhost:8080/users/update/${id}`, updatedUser);
   }
 
   deleteUser(id) {
@@ -43,6 +46,10 @@ export class HttpClientService {
 
   getBooks(params: any) {
     return this.httpClient.get<Book[]>('http://localhost:8080/books/get', {params});
+  }
+  
+  getUserProfile() {
+    return this.httpClient.get<UserProfile[]>('http://localhost:8080/type/get');
   }
 
   addBook(newBook: Book) {

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -41,5 +42,20 @@ public class UserController {
 		userRepository.deleteById(id);
 		return user;
 	}
+	
+	@PutMapping("/update/{id}")
+    public User updateUser(@PathVariable("id") long id, @RequestBody User userDetails) {
+        // Trova l'utente esistente
+        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        
+        // Aggiorna i dettagli dell'utente
+        user.setName(userDetails.getName());
+        user.setType(userDetails.getType());
+        user.setPassword(userDetails.getPassword());
+        
+        
+        // Salva le modifiche
+        return userRepository.save(user);
+    }
 
 }

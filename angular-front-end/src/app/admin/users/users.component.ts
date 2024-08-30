@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { User } from 'src/app/model/User ';
 import { HttpClientService } from 'src/app/service/http-client.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { UserProfile } from 'src/app/model/UserProfile';
+import { FeedBack } from 'src/app/model/FeedBack';
 
 @Component({
   selector: 'app-users',
@@ -14,6 +16,10 @@ export class UsersComponent implements OnInit {
   users: Array<User>;
   action: string;
   selectedUser: User;
+  designations: UserProfile[] = [];
+  feedback = new FeedBack("", "");
+
+
   constructor(private httpClientService: HttpClientService,
     private router: Router,
     private activatedRoute: ActivatedRoute) { }
@@ -21,10 +27,13 @@ export class UsersComponent implements OnInit {
   ngOnInit() {
 
     this.refreshData();
+    this.loadDesignations();
+
+    this.feedback = { feedbackType: '', feedbackmsg: '' };
   }
 
   refreshData(){
-    console.log('Test');
+    //console.log('Test');
     this.httpClientService.getUsers().subscribe(
       response => this.handleSuccessfulResponse(response),
     );
@@ -41,6 +50,25 @@ export class UsersComponent implements OnInit {
 
   }
 
+  loadDesignations() {
+    // Example call - adjust according to your actual service
+    this.httpClientService.getUserProfile().subscribe({
+      next: (response: UserProfile[]) => {
+        this.designations = response;
+      },
+      error: (error) => {
+        console.error('Error loading designations', error);
+        this.feedback = {
+          feedbackType: error.feedbackType,
+          feedbackmsg: error.feedbackmsg,
+        };
+      },
+      complete: () => {
+      }
+    });
+  }
+  
+
   viewUser(id: number) {
     this.router.navigate(['admin','users'], {queryParams : {id, action: 'view'}});
   }
@@ -53,5 +81,11 @@ export class UsersComponent implements OnInit {
   handleSuccessfulResponse(response) {
     this.users = response;
   }
+
+  getDesignationName(cod: string): string {
+    const designation = this.designations.find(d => d.cod === cod);
+    return designation ? designation.nameCod : 'ERROR Not Found';
+  }
+  
 
 }

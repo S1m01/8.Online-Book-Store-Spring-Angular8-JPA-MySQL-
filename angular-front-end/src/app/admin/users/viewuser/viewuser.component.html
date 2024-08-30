@@ -1,21 +1,59 @@
-<div class="userDetails">
-    <h2>User details</h2>
-  
-    <table>
-      <tr>
-        <td>User Id</td>
-        <td>{{user.id}}</td>
-      </tr>
-      <tr>
-        <td>User Name</td>
-        <td>{{user.name}}</td>
-      </tr>
-      <tr>
-        <td>User Type</td>
-        <td>{{user.type}}</td>
-      </tr>
-  
-    </table>
-    <br>
-    <a class="btn btn-small btn-danger" (click)="deleteUser()"> delete</a>
-  </div>
+<div class="user-details container mt-4">
+  <h2 class="mb-4">User Details</h2>
+  <form [formGroup]="userForm" (ngSubmit)="onSave()">
+    <div class="table-responsive">
+      <table class="table table-bordered">
+        <tbody>
+          <tr>
+            <td><strong>User Name</strong></td>
+            <td>
+              <input type="text" class="form-control" formControlName="name" placeholder="Enter User Name">
+              <div *ngIf="userForm.get('name').touched && userForm.get('name').invalid" class="text-danger">
+                <div *ngIf="userForm.get('name').errors.required">User Name is required.</div>
+                <div *ngIf="userForm.get('name').errors.minlength">User Name must be at least 3 characters long.</div>
+                <div *ngIf="userForm.get('name').errors.maxlength">User Name cannot exceed 50 characters.</div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td><strong>User Type</strong></td>
+            <td>
+              <select class="form-control" formControlName="type">
+                <option value="">Select User Type</option>
+                <option *ngFor="let type of designations" [value]="type.cod">{{ type.nameCod }}</option>
+              </select>
+              <div *ngIf="userForm.get('type').touched && userForm.get('type').invalid" class="text-danger">
+                <div *ngIf="userForm.get('type').errors.required">User Type is required.</div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Password</strong></td>
+            <td>
+              <div style="position: relative;">
+                <!-- Eye icon centered vertically with the input -->
+                <div (click)="togglePassword()"
+                     style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); cursor: pointer; color: #6c757d; z-index: 1;">
+                  <i class="fa" [ngClass]="showPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+                </div>
+                <input [type]="showPassword ? 'text' : 'password'"
+                       class="form-control"
+                       formControlName="password"
+                       placeholder="Enter Password"
+                       style="padding-right: 40px;">
+              </div>
+              <div *ngIf="userForm.get('password').touched && userForm.get('password').invalid" class="text-danger">
+                <div *ngIf="userForm.get('password').errors.required">Password is required.</div>
+                <div *ngIf="userForm.get('password').errors.minlength">Password must be at least 6 characters long.</div>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="d-flex justify-content-between mt-3">
+      <button type="button" class="btn btn-danger btn-sm" (click)="deleteUser()">Delete</button>
+      <button type="submit" class="btn btn-primary btn-sm" [disabled]="userForm.invalid">Save Changes</button>
+    </div>
+  </form>
+</div>

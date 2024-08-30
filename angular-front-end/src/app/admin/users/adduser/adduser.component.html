@@ -1,15 +1,100 @@
-<h1>Add User</h1>
-<form #recievedUser="ngForm">
+<div class="container mt-4">
+  <div class="card">
+    <div class="card-header">
+      <h5 class="card-title mb-0">Add User</h5>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+        <!-- Name Field -->
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input 
+            type="text" 
+            class="form-control" 
+            id="name" 
+            placeholder="Enter user name" 
+            formControlName="name"
+            [ngClass]="{
+              'is-invalid': userForm.get('name').invalid && userForm.get('name').touched,
+              'is-valid': userForm.get('name').valid && userForm.get('name').touched
+            }"
+          >
+          <div *ngIf="userForm.get('name').invalid && userForm.get('name').touched" class="invalid-feedback">
+            Name is required.
+          </div>
+        </div>
 
-  <label for="name">Name</label>
-  <input type="text" class="form-control" id="name" placeholder="user name" [(ngModel)]="user.name" name="name">
+        <!-- Type Field -->
+        <div class="form-group">
+          <label for="type">Type</label>
+          <select 
+            id="type" 
+            class="form-control" 
+            formControlName="type"
+            [ngClass]="{
+              'is-invalid': userForm.get('type').invalid && userForm.get('type').touched,
+              'is-valid': userForm.get('type').valid && userForm.get('type').touched
+            }">
+            <option value="" disabled>Select type</option>
+            <option *ngFor="let designation of designations" [value]="designation.cod">
+              {{ designation.nameCod }}
+            </option>
+          </select>
+          <div *ngIf="userForm.get('type').invalid && userForm.get('type').touched" class="invalid-feedback">
+            Type is required.
+          </div>
+        </div>
 
-  <label for="type">Type</label>
-  <input type="text" class="form-control" id="type" placeholder="type name" [(ngModel)]="user.type" name="name">
+        <!-- Password Field -->
+        <div class="form-group position-relative">
+          <label for="password">Password</label>
+          <div class="input-group">
+            <input 
+              [type]="showPassword ? 'text' : 'password'" 
+              class="form-control pr-4" 
+              id="password" 
+              placeholder="Enter password" 
+              formControlName="password"
+              [ngClass]="{
+                'is-invalid': userForm.get('password').invalid && userForm.get('password').touched,
+                'is-valid': userForm.get('password').valid && userForm.get('password').touched
+              }"
+            >
+            <div class="position-absolute" style="top: 50%; right: 40px; transform: translateY(-50%);">
+              <i 
+                class="fas" 
+                [ngClass]="{
+                  'fa-eye': !showPassword,
+                  'fa-eye-slash': showPassword
+                }" 
+                (click)="togglePassword()"
+                style="cursor: pointer;"
+              ></i>
+            </div>
+          </div>
+          <div *ngIf="userForm.get('password').invalid && userForm.get('password').touched" class="invalid-feedback">
+            Password is required and must be at least 6 characters long.
+          </div>
+        </div>
 
-  <label for="password">Password</label>
-  <input type="password" class="form-control" id="password" placeholder="password" [(ngModel)]="user.password" name="password">
-
-   <br>
-  <button type="button" class="btn btn-success" (click)="addUser()">Save</button>
-</form>
+        <!-- Submit Button -->
+        <div class="form-group">
+          <button 
+            type="submit" 
+            class="btn btn-success" 
+            [disabled]="userForm.invalid || isSubmitting"
+          >
+            {{ isSubmitting ? 'Saving...' : 'Save' }}
+          </button>
+          <div *ngIf="feedback.feedbackmsg" class="mt-2 alert"
+               [ngClass]="{
+                 'alert-danger': feedback.feedbackType === 'error',
+                 'alert-info': feedback.feedbackType === 'info'
+               }">
+            {{ feedback.feedbackmsg }}
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>

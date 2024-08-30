@@ -23,6 +23,9 @@ export class CartListComponent implements OnInit {
     if (data !== null) {
       this.cartBooks = JSON.parse(data);
     }
+
+    this.feedback = { feedbackType: '', feedbackmsg: '' };
+
   }
 
   // Calcola il prezzo totale del carrello
