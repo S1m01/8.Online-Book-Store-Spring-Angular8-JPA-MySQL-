@@ -47,6 +47,10 @@ export class HttpClientService {
   getBooks(params: any) {
     return this.httpClient.get<Book[]>('http://localhost:8080/books/get', {params});
   }
+
+  getBooksLib() {
+    return this.httpClient.get<Book[]>('http://localhost:8080/books/get');
+  }
   
   getUserProfile() {
     return this.httpClient.get<UserProfile[]>('http://localhost:8080/type/get');

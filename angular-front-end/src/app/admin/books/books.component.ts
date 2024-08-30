@@ -20,13 +20,35 @@ export class BooksComponent implements OnInit {
     private router: Router) { }
 
   ngOnInit() {
-    //this.refreshData();
+    this.refreshData();
   }
 
-  /*refreshData() {
-    this.httpClientService.getBooks().subscribe(
-      response => this.handleSuccessfulResponse(response)
-    );
+  refreshData() {
+    this.books = [];
+    this.httpClientService.getBooksLib().subscribe({
+      next: (data: any) => {
+        if (data.length !== 0) {
+          this.books = data.books.map(book => ({
+            ...book,
+            retrievedImage: 'data:image/jpeg;base64,' + book.picByte
+          }));
+          //this.feedback = { feedbackType: 'success', feedbackmsg: 'loaded' };
+        };
+      },
+      error: (err: any) => {
+        console.log(err);
+        //this.isLoading = false;
+        /*this.feedback = {
+          feedbackType: err.feedbackType,
+          feedbackmsg: err.feedbackmsg,
+        };*/
+      },
+      complete: () => {
+        //this.isLoading = true;
+        //this.feedback = { feedbackType: 'success', feedbackmsg: 'loaded' };
+      },
+    });
+    
     this.activedRoute.queryParams.subscribe(
       (params) => {
         // get the url parameter named action. this can either be add or view.
@@ -43,7 +65,7 @@ export class BooksComponent implements OnInit {
         }
       }
     );
-  }*/
+  }
 
   // we will be taking the books response returned from the database
   // and we will be adding the retrieved   

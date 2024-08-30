@@ -42,7 +42,7 @@ public class BookController {
 	public ResponseEntity<Object> getBooks( @RequestParam(value = "page", defaultValue = "0") int page,
             @RequestParam(value = "size", defaultValue = "10") int size,
             @RequestParam(name = "sort", required = false, defaultValue = "id") String sort,
-            @RequestParam(name="order", required = false, defaultValue = "DESC") String order) {
+            @RequestParam(name="order", required = false, defaultValue = "ASC") String order) {
 		
 		Sort.Direction sortDirection = "DESC".equalsIgnoreCase(order) ? Sort.Direction.DESC : Sort.Direction.ASC;
         Pageable paging = PageRequest.of(page, size, Sort.by(sortDirection, sort));

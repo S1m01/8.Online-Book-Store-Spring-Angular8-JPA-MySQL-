@@ -204,4 +204,8 @@ export class ShopbookComponent implements OnInit {
   private updateLocalStorage() {
     localStorage.setItem('cart', JSON.stringify(this.cartBooks));
   }
+
+  get totalPrice(): number {
+    return this.cartBooks.reduce((total, book) => total + (book.price * book.quantity), 0);
+  }
 }
