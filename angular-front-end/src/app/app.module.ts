@@ -18,6 +18,7 @@ import { HttpClientService } from './service/http-client.service';
 import { CartListComponent } from './cart/cart.list.component';
 import { PageNotFoundComponent } from './page.not.found.component';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { LoginComponent } from './authentication/login.component';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { NgxPaginationModule } from 'ngx-pagination';
     ViewbookComponent,
     ShopbookComponent,
     CartListComponent,
-    PageNotFoundComponent
+    PageNotFoundComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,

@@ -1,8 +1,11 @@
 package com.javainuse.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -57,5 +60,16 @@ public class UserController {
         // Salva le modifiche
         return userRepository.save(user);
     }
+	
+	 @PostMapping("/login")
+	    public ResponseEntity<Object> login(@RequestBody User user) {
+	        Optional<User> foundUser = userRepository.findByNameAndPassword(user.getName(), user.getPassword());
+
+	        if (foundUser.isPresent()) {
+	            return new ResponseEntity<>(foundUser.get(), HttpStatus.OK);
+	        } else {
+	            return new ResponseEntity<>("Invalid name or password", HttpStatus.UNAUTHORIZED);
+	        }
+	    }
 
 }

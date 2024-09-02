@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { User } from '../model/User ';
 import { Book } from '../model/Book';
 import { UserProfile } from '../model/UserProfile';
 import { Observable } from 'rxjs';
+import { UserLogin } from '../model/UserLogin';
 
 @Injectable({
   providedIn: 'root'
@@ -66,5 +67,9 @@ export class HttpClientService {
 
   updateBook(updatedBook: Book) {
     return this.httpClient.put<Book>('http://localhost:8080/books/update', updatedBook);
+  }
+
+  login(login: UserLogin): Observable<UserLogin>{
+    return this.httpClient.post<UserLogin>(`http://localhost:8080/users/login`, login, {headers: new HttpHeaders({'Content-Type': 'application/json'})});
   }
 }

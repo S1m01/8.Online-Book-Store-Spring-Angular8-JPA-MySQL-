@@ -1,20 +1,41 @@
 <header>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark">
-        <div><img src="assets/img/logo.jpg" class="navbar-brand">JavaInUse</div>
-       
+        <div class="container">
+            <!-- Logo e Nome -->
+            <a class="navbar-brand" routerLink="/">
+                <img src="assets/img/logo.jpg" alt="Logo"> JavaInUse
+            </a>
 
-        <ul class="navbar-nav">
-            <li><a  class="nav-link" routerLink="/shop"  >Shop</a></li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
-                    aria-haspopup="true" aria-expanded="false">
-                    Admin
-                </a>
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                    <a  routerLinkActive="active" routerLink="/admin/users" class="dropdown-item">Users</a>
-                    <a  routerLinkActive="active" routerLink="/admin/books" class="dropdown-item">Books</a>
-                </div>
-            </li>
-        </ul>
+            <!-- Toggle Button per schermi piccoli -->
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <!-- Navigazione -->
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" routerLink="/shop">Shop</a>
+                    </li>
+                    <li *ngIf="admin" class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Admin
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a routerLink="/admin/users" class="dropdown-item">Users</a>
+                            <a routerLink="/admin/books" class="dropdown-item">Books</a>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <a *ngIf="!isLoggedIn" class="nav-link" routerLink="/login">Login</a>
+                        <a *ngIf="isLoggedIn" class="nav-link" (click)="logout()">Logout</a>
+                    </li>
+                </ul>
+                <!-- UserName -->
+                <span class="navbar-text ml-auto">
+                    {{ userName }}
+                </span>
+            </div>
+        </div>
     </nav>
 </header>
