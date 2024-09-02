@@ -23,38 +23,40 @@ export class UserGuard implements CanActivate {
       
       // Supponiamo che 'User' contenga un JSON con i dettagli dell'utente.
       let userString: string | null = localStorage.getItem('User');
+      
       if (userString) {
          try {
             let user = JSON.parse(userString);
-
-            // Controlla se l'utente è loggato e il tipo di utente
-            if (user) {
-               if (user.type === 'ADM') {
-                  if (url === "/login") {
-                     // Reindirizza a un'area specifica per l'amministratore
-                     return this.router.parseUrl('/admin/users');
-                  }
-                  // Permetti l'accesso per il tipo ADM
-                  return true;
-               } else {
-                  // Reindirizza se non è un amministratore e cerca di accedere all'area amministrativa
-                  if (url === "/admin/users") {
-                     return this.router.parseUrl('/shop'); // o qualsiasi altra route per accesso negato
-                  }
-                  // Permetti l'accesso per altri tipi di utente
-                  return true;
+   
+            if (user && user.type === 'ADM') {
+               if (url === '/login') {
+                  // Reindirizza a un'area specifica per l'amministratore
+                  console.log("Redirecting to /admin/users");
+                  return this.router.parseUrl('/admin/users');
                }
+               // Permetti l'accesso per il tipo ADM
+               return true;
+            } else if (user) {
+               // Non è un amministratore
+               if (url === '/admin/users') {
+                  console.log("Redirecting to /shop");
+                  return this.router.parseUrl('/shop'); // o qualsiasi altra route per accesso negato
+               }
+               return true;
             } else {
                // Se l'oggetto user è nullo, reindirizza alla pagina di login
+               console.log("Redirecting to /login");
                return this.router.parseUrl('/login');
             }
          } catch (e) {
             console.error("Errore nel parsing dell'utente:", e);
             // Se c'è un errore nel parsing, reindirizza alla pagina di login
+            console.log("Redirecting to /login due a errore di parsing");
             return this.router.parseUrl('/login');
          }
       } else {
          // Se non ci sono dati utente, reindirizza alla pagina di login
+         console.log("Redirecting to /login per mancanza di dati utente");
          return this.router.parseUrl('/login');
       }
    }
