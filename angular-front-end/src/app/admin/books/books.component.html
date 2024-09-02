@@ -1,28 +1,46 @@
-<h1>Books Admin</h1>
-<a class="btn btn-primary mb-3" (click)="addBook()">Add New Book</a>
-<div class="container row">
-  <div class="col-md-6">
-    <table class="table">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Book Name</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let book of books">
-          <td>{{book.id}}</td>
-          <td>{{book.name}}</td>
-          <td>
-            <button type="button" class="btn btn-primary" (click)="viewBook(book.id)">Show Details</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+<h1 class="text-center mb-4">Books Admin</h1>
+<div class="container">
+  <!-- Add New Book Button -->
+  <div class="d-flex justify-content-end mb-3">
+    <button class="btn btn-primary" (click)="addBook()">Add New Book</button>
   </div>
-  <div class="col-md-6">
-    <app-viewbook *ngIf="action === 'view'" [book]="selectedBook" (bookDeletedEvent)="refreshData()"></app-viewbook>
-    <app-addbook *ngIf="action === 'edit' || action === 'add'" [book]="selectedBook" (bookAddedEvent)="refreshData()"></app-addbook>
+
+  <!-- Books List and Actions -->
+  <div class="row">
+    <!-- Books Table -->
+    <div class="col-md-6 mb-4">
+      <div class="table-responsive">
+        <table class="table table-hover table-bordered">
+          <thead class="thead-dark">
+            <tr>
+              <th>ID</th>
+              <th>Book Name</th>
+              <!--<th>Author</th>-->
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let book of books">
+              <td>{{book.id}}</td>
+              <td>{{book.name}}</td>
+              <!--<td>{{book.author}}</td>-->
+              <td>
+                <button type="button" class="btn btn-info btn-sm" (click)="viewBook(book.id)">Show Details</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Book Details or Add/Edit Book Form -->
+    <div class="col-md-6">
+      <!-- View Book Component -->
+      <app-viewbook *ngIf="action === 'view'" [book]="selectedBook" (bookDeletedEvent)="refreshData()"></app-viewbook>
+
+      <!-- Add/Edit Book Component -->
+      <app-addbook *ngIf="action === 'edit' || action === 'add'" [book]="selectedBook"
+        (bookAddedEvent)="refreshData()"></app-addbook>
+    </div>
   </div>
 </div>

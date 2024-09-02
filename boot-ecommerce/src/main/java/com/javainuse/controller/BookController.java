@@ -93,7 +93,18 @@ public class BookController {
 	}
 	
 	@PutMapping("/update")
-	public void updateBook(@RequestBody Book book) {
-		bookRepository.save(book);
+	public ResponseEntity<Book> updateBook(@RequestBody Book book) {
+	    if (this.bytes != null) {
+	        book.setPicByte(this.bytes);
+	        this.bytes = null;  // Reset the byte array after updating the image
+	    } else {
+	        // Keep the existing image if no new image is uploaded
+	        Book existingBook = bookRepository.findById(book.getId()).orElse(null);
+	        if (existingBook != null) {
+	            book.setPicByte(existingBook.getPicByte());
+	        }
+	    }
+	    Book updatedBook = bookRepository.save(book);
+	    return new ResponseEntity<>(updatedBook, HttpStatus.OK);
 	}
 }
