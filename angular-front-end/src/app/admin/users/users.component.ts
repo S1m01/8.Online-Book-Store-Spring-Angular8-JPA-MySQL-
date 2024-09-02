@@ -18,6 +18,7 @@ export class UsersComponent implements OnInit {
   selectedUser: User;
   designations: UserProfile[] = [];
   feedback = new FeedBack("", "");
+  admin: boolean = false;
 
 
   constructor(private httpClientService: HttpClientService,
@@ -29,7 +30,20 @@ export class UsersComponent implements OnInit {
     this.refreshData();
     this.loadDesignations();
 
-    this.feedback = { feedbackType: '', feedbackmsg: '' };
+    /*const storedUser = localStorage.getItem('User');
+    const user = storedUser ? JSON.parse(storedUser) : null;
+    this.admin = user && user.type === 'ADM';
+
+    if (!this.admin) {
+      this.feedback = {
+        feedbackType: 'error',
+        feedbackmsg: 'You are not authorized. Redirecting to home...'
+      };
+      setTimeout(() => {
+        this.router.navigate(['/']);
+      }, 3000);
+    }*/
+
   }
 
   refreshData(){

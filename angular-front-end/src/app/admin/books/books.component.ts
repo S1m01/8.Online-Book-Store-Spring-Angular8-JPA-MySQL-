@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Book } from 'src/app/model/Book';
 import { HttpClientService } from 'src/app/service/http-client.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { FeedBack } from 'src/app/model/FeedBack';
 
 @Component({
   selector: 'app-books',
@@ -12,8 +13,11 @@ export class BooksComponent implements OnInit {
 
   books: Array<Book>;
   booksRecieved: Array<Book>;
+  feedback = new FeedBack("", "");
   action: string;
   selectedBook: Book;
+  admin: boolean = false;
+  isLoading: boolean = true
 
   constructor(private httpClientService: HttpClientService,
     private activedRoute: ActivatedRoute,
@@ -21,6 +25,20 @@ export class BooksComponent implements OnInit {
 
   ngOnInit() {
     this.refreshData();
+
+    /*const storedUser = localStorage.getItem('User');
+    const user = storedUser ? JSON.parse(storedUser) : null;
+    this.admin = user && user.type === 'ADM';
+
+    if (!this.admin) {
+      this.feedback = {
+        feedbackType: 'error',
+        feedbackmsg: 'You are not authorized. Redirecting to home...'
+      };
+      setTimeout(() => {
+        this.router.navigate(['/']);
+      }, 3000);
+    }*/
   }
 
   refreshData() {
@@ -37,14 +55,14 @@ export class BooksComponent implements OnInit {
       },
       error: (err: any) => {
         console.log(err);
-        //this.isLoading = false;
-        /*this.feedback = {
+        this.isLoading = false;
+        this.feedback = {
           feedbackType: err.feedbackType,
           feedbackmsg: err.feedbackmsg,
-        };*/
+        };
       },
       complete: () => {
-        //this.isLoading = true;
+        this.isLoading = true;
         //this.feedback = { feedbackType: 'success', feedbackmsg: 'loaded' };
       },
     });
@@ -94,6 +112,15 @@ export class BooksComponent implements OnInit {
 
   viewBook(id: number) {
     this.router.navigate(['admin', 'books'], { queryParams: { id, action: 'view' } });
+  }
+
+  handleErrorFeedback(feedback: FeedBack) {
+    this.feedback = feedback;
+    if(this.feedback.feedbackType == 'error') 
+      this.isLoading = false;
+    else 
+    this.isLoading = true;
+    // You can now use this.errorFeedback to show the error message in the parent component's template
   }
 
 }

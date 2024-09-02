@@ -6,10 +6,11 @@ import { ShopbookComponent } from './shopbook/shopbook.component';
 import { CartListComponent } from './cart/cart.list.component';
 import { PageNotFoundComponent } from './page.not.found.component';
 import { LoginComponent } from './authentication/login.component';
+import { UserGuard } from './authentication/user.guard';
 
 
 const routes: Routes = [
-  { path: 'admin/users', component: UsersComponent },
+  { path: 'admin/users', component: UsersComponent, canActivate: [UserGuard] },
   { path: 'admin/books', component: BooksComponent },
   { path: 'cart', component: CartListComponent },
   { path: 'shop', component: ShopbookComponent },

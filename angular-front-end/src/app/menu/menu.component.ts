@@ -20,7 +20,7 @@ export class MenuComponent implements OnInit {
 
     if(user && user.name){
       this.userName = user.name;
-      if(user.type == 'AMD'){
+      if(user.type == 'ADM'){
         this.admin = true;
         console.log(this.admin)
       }
