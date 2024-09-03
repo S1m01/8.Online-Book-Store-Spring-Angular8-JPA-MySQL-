@@ -10,6 +10,7 @@ export class MenuComponent implements OnInit {
   isLoggedIn = false;
   userName: string = null;
   admin: boolean = false;
+  mrk: boolean = false;
 
   constructor() { }
 
@@ -22,12 +23,19 @@ export class MenuComponent implements OnInit {
       this.userName = user.name;
       if(user.type == 'ADM'){
         this.admin = true;
-        console.log(this.admin)
+        this.mrk = false;
+      }
+      if(user.type == 'MRK'){
+        this.admin = false;
+        this.mrk = true;
       }
       this.isLoggedIn = true;
     } else {
       this.userName = 'Guest';
       this.isLoggedIn = false;
+      this.admin = false;
+      this.mrk = false;
+
     }
 
   }
