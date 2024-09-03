@@ -1,5 +1,6 @@
 package com.javainuse.model;
 
+import java.util.Date;
 import java.util.Set;
 
 import org.springframework.data.jpa.repository.Query;
@@ -24,9 +25,51 @@ public class Book {
 
 	@Column(name = "price")
 	private String price;
-
+	
+	@Column(name = "sale")
+	private String sale;
+	
+	@Column(name = "dateStart")
+	private Date dateStart;
+	
+	@Column(name = "dateEnd")
+	private Date dateEnd;
+	
 	@Column(name = "picByte", length = 100000)
 	private byte[] picByte;
+
+	public Book(String sale, Date dateStart, Date dateEnd) {
+		this.sale = sale;
+		this.dateStart = dateStart;
+		this.dateEnd = dateEnd;
+	}
+
+	public Book() {
+	}
+
+	public String getSale() {
+		return sale;
+	}
+
+	public void setSale(String sale) {
+		this.sale = sale;
+	}
+
+	public Date getDateStart() {
+		return dateStart;
+	}
+
+	public void setDateStart(Date dateStart) {
+		this.dateStart = dateStart;
+	}
+
+	public Date getDateEnd() {
+		return dateEnd;
+	}
+
+	public void setDateEnd(Date dateEnd) {
+		this.dateEnd = dateEnd;
+	}
 
 	public Long getId() {
 		return id;

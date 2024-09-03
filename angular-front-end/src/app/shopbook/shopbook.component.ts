@@ -22,7 +22,7 @@ export class ShopbookComponent implements OnInit {
 
   totalItems: number = 0;
   pagination: number = 0;
-  bookPage: number = 3;
+  bookPage: number = 10;
   sortField: string = "name"
   order: string = "DESC";
 
@@ -51,39 +51,48 @@ export class ShopbookComponent implements OnInit {
   }
 
   load() {
-    let params = new HttpParams;
-
-    params = params.append('page', String(this.pagination));
-    params = params.append('size', "" + this.bookPage);
-    params = params.append('sort', "" + this.sortField);
-    params = params.append('order', "" + this.order);
+    let params = new HttpParams()
+        .append('page', String(this.pagination))
+        .append('size', String(this.bookPage))
+        .append('sort', this.sortField)
+        .append('order', this.order);
 
     this.books = [];
     this.httpClientService.getBooks(params).subscribe({
-      next: (data: any) => {
-        if (data.length !== 0) {
-          this.books = data.books.map(book => ({
-            ...book,
-            retrievedImage: 'data:image/jpeg;base64,' + book.picByte
-          }));
-          this.totalItems = data.totalItems;
-          this.feedback = { feedbackType: 'success', feedbackmsg: 'loaded' };
-        };
-      },
-      error: (err: any) => {
-        console.log(err);
-        //this.isLoading = false;
-        this.feedback = {
-          feedbackType: err.feedbackType,
-          feedbackmsg: err.feedbackmsg,
-        };
-      },
-      complete: () => {
-        //this.isLoading = true;
-        //this.feedback = { feedbackType: 'success', feedbackmsg: 'loaded' };
-      },
+        next: (data: any) => {
+            if (data.books && data.books.length > 0) {
+                this.books = data.books.map(book => {
+                    const priceValue = parseFloat(book.price);
+                    const discountValue = parseFloat(book.sale);
+
+                    // Calculate the final price
+                    const finalPrice = discountValue > 0 
+                        ? priceValue - (priceValue * discountValue / 100) 
+                        : priceValue;
+
+                    return {
+                        ...book,
+                        retrievedImage: 'data:image/jpeg;base64,' + book.picByte,
+                        finalPrice: finalPrice.toFixed(2) // Ensure the final price is formatted correctly
+                    };
+                });
+                console.log(this.books)
+                this.totalItems = data.totalItems;
+                this.feedback = { feedbackType: 'success', feedbackmsg: 'Loaded successfully' };
+            } else {
+                this.feedback = { feedbackType: 'info', feedbackmsg: 'No books found' };
+            }
+        },
+        error: (err: any) => {
+            console.error('Error loading books:', err);
+            this.feedback = {
+                feedbackType: 'error',
+                feedbackmsg: err.message || 'An error occurred while loading books'
+            };
+        }
     });
-  }
+}
+
 
   renderPage(event: number) {
     this.pagination = event - 1;

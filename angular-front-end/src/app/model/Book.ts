@@ -7,4 +7,7 @@ export class Book {
     retrievedImage: string; 
     isAdded: boolean;
     quantity: number;
+    sale: number;
+    dateStart: Date;
+    dateEnd: Date;
     }

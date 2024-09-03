@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,6 +28,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.javainuse.db.BookRepository;
 import com.javainuse.model.Book;
+import com.javainuse.model.OrderBook;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
@@ -107,4 +109,32 @@ public class BookController {
 	    Book updatedBook = bookRepository.save(book);
 	    return new ResponseEntity<>(updatedBook, HttpStatus.OK);
 	}
+	
+	@PutMapping("/calculateFinalPrice")
+	public ResponseEntity<String> calculateFinalPrice(@RequestBody Book book) {
+	    try {
+	        // Find the book by ID
+	        Optional<Book> existingBook = bookRepository.findById(book.getId());
+
+	        if (existingBook.isPresent()) {
+	            // Update the existing book's discount and dates
+	            Book saleBook = existingBook.get();
+	            saleBook.setSale(book.getSale());
+	            saleBook.setDateStart(book.getDateStart());
+	            saleBook.setDateEnd(book.getDateEnd());
+
+	            // Save the updated book with the calculated price
+	            bookRepository.save(saleBook);
+
+	            return ResponseEntity.ok("Final price calculated and book updated successfully.");
+	        } else {
+	            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: Book not found");
+	        }
+	    } catch (NumberFormatException e) {
+	        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error calculating final price: Invalid price or discount format");
+	    } catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error calculating final price: " + e.getMessage());
+	    }
+	}
+
 }

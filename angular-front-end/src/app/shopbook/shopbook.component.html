@@ -4,12 +4,10 @@
             <h2>Searching Books</h2>
             <form [formGroup]="searchForm" (ngSubmit)="onSearch()">
                 <div class="form-group row">
-                    <label for="search" class="col-sm-1 col-form-label">Cerca</label>
+                    <label for="search" class="col-sm-2 col-form-label">Cerca</label>
                     <div class="col-sm-10">
-                        <input type="text" formControlName="search" placeholder="title and author">
-                        <div class="input-group-append">
-                            
-                        </div>
+                        <input type="text" id="search" formControlName="search" class="form-control"
+                            placeholder="Title and Author">
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary">Search Books</button>
@@ -17,10 +15,6 @@
             </form>
         </div>
     </div>
-    <!-- Messaggio di avviso se la ricerca non produce risultati 
-    <div *ngIf="books.length === 0 && searchKeyword" class="alert alert-info mt-4 text-center">
-        No Books or Authors found matching "{{ searchKeyword }}".
-    </div>-->
 </div>
 <br>
 
@@ -28,8 +22,7 @@
     {{ feedback.feedbackmsg }}
 </div>
 
-
-<!-- CARRELLO -->
+<!-- CART -->
 <div class="container my-4">
     <div class="row align-items-center">
         <div class="col-md-8">
@@ -44,33 +37,33 @@
                 </button>
                 <div class="dropdown-menu dropdown-menu-right p-3" aria-labelledby="cartDropdown"
                     style="min-width: 400px;">
-                    <!-- Verifica se il carrello è vuoto -->
+                    <!-- Cart empty check -->
                     <div *ngIf="cartBooks.length === 0" class="alert alert-warning text-center">
-                        <span>Your cart is empty.</span>
+                        Your cart is empty.
                     </div>
-                    <!-- Mostra i libri nel carrello se non è vuoto -->
+                    <!-- Cart items -->
                     <div *ngIf="cartBooks.length > 0">
                         <div *ngFor="let item of cartBooks" class="dropdown-item p-0">
                             <div class="d-flex align-items-center justify-content-between py-2">
-                                <!-- Immagine del libro -->
+                                <!-- Book Image -->
                                 <div class="mr-2">
                                     <img [src]="item.retrievedImage" alt="{{item.name}}" height="50" width="35">
                                 </div>
-                                <!-- Nome del libro con troncamento -->
+                                <!-- Book Name -->
                                 <div class="mr-2">
                                     <span>{{ item.name.length > 15 ? (item.name | slice:0:15) + '...' : item.name
                                         }}</span>
                                 </div>
-                                <!-- Quantità -->
+                                <!-- Quantity -->
                                 <div class="mr-2">
                                     <input type="number" class="form-control form-control-sm text-center"
                                         [(ngModel)]="item.quantity" min="1">
                                 </div>
-                                <!-- Prezzo -->
+                                <!-- Price -->
                                 <div class="mr-2">
                                     <strong>${{item.price * item.quantity | number:'1.2-2'}}</strong>
                                 </div>
-                                <!-- Pulsante di rimozione -->
+                                <!-- Remove Button -->
                                 <button class="btn btn-danger btn-sm" (click)="removeBook(item)">
                                     <img src="assets/img/trash.png" alt="Trash" style="width: 20px; height: auto;">
                                 </button>
@@ -89,23 +82,21 @@
     </div>
 </div>
 
-
-
-<!-- LISTA LIBRI -->
+<!-- Book List Section -->
 <div class="container my-4">
     <div class="row mb-3">
-        <!-- Bottoni di ordinamento a sinistra sopra la lista dei libri -->
+        <!-- Sorting Buttons and Dropdown -->
         <div class="col-12">
-            <div class="d-flex justify-content-start">
-                <button class="btn btn-white mr-2" (click)="toggleSortOrder()">
-                    <img *ngIf="order === 'ASC'" src="\assets\img\Ascending.png" alt="Sort ASC">
-                    <img *ngIf="order === 'DESC'" src="\assets\img\Descending.png" alt="Sort DESC">
+            <div class="d-flex align-items-center">
+                <!-- Sort Order Button -->
+                <button class="btn btn-white mr-2" (click)="toggleSortOrder()" aria-label="Toggle sort order">
+                    <img *ngIf="order === 'ASC'" src="assets/img/Ascending.png" alt="Sort Ascending">
+                    <img *ngIf="order === 'DESC'" src="assets/img/Descending.png" alt="Sort Descending">
                 </button>
 
-                <!-- Dropdown per selezionare l'ordinamento -->
+                <!-- Dropdown for Sorting Options -->
                 <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="orderDropdown"
-                        data-toggle="dropdown" aria-expanded="false">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="orderDropdown" data-toggle="dropdown" aria-expanded="false">
                         Order by: {{ sortField }}
                     </button>
                     <div class="dropdown-menu" aria-labelledby="orderDropdown">
@@ -118,27 +109,40 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-md-4 mb-4"
-            *ngFor="let book of books | paginate: { itemsPerPage: bookPage, currentPage: pagination + 1, totalItems: totalItems }; let i = index">
+        <!-- Book Cards -->
+        <div class="col-md-4 mb-4" *ngFor="let book of books | paginate: { itemsPerPage: bookPage, currentPage: pagination + 1, totalItems: totalItems }; let i = index">
             <div class="card h-100">
-                <img class="card-img-top mx-auto mt-3" [src]="book.retrievedImage" alt="{{book.name}}"
-                    style="height: 300px; width: 200px;">
+                <img class="card-img-top mx-auto mt-3" [src]="book.retrievedImage" alt="{{ book.name }}" style="height: 300px; width: 200px;">
                 <div class="card-body text-center">
                     <h5 class="card-title">
-                        {{ book?.name && book.name.length > 20 ? (book.name | slice:0:20) + '...' : book?.name || 'No
-                        Title' }}
+                        {{ book?.name && book.name.length > 20 ? (book.name | slice:0:20) + '...' : book?.name || 'No Title' }}
                     </h5>
-                    <p class="card-text"><strong>${{book.price}}</strong></p>
-                    <p class="card-text">{{book.author}}</p>
+                    <p class="card-text">
+                        <!-- Display discount percentage if applicable -->
+                        <span *ngIf="book.sale > 0" class="text-danger ml-2">
+                            -{{ book.sale }}%
+                        </span>
+                        <!-- Display final price after discount -->
+                        <strong *ngIf="book.sale > 0">
+                            ${{ book.finalPrice | number: '1.2-2' }}<br>
+                        </strong>
+                        <!-- Display original price with strikethrough if discount is available -->
+                        <span *ngIf="book.sale > 0" class="text-muted" style="text-decoration: line-through;">
+                            ${{ book.price | number: '1.2-2' }}
+                        </span>
+                        <!-- Display only original price if no discount -->
+                        <strong *ngIf="book.sale == 0">
+                            ${{ book.price | number: '1.2-2' }}
+                        </strong>
+                    </p>
+                    <p class="card-text">{{ book.author }}</p>
                     <div class="d-flex justify-content-center align-items-center mb-3">
                         <form [formGroup]="quantityForm">
                             <div class="input-group">
-                                <input type="number" class="form-control form-control-sm mr-2"
-                                    formControlName="quantity" min="0" style="width: 60px;">
+                                <input type="number" class="form-control form-control-sm mr-2" formControlName="quantity" min="0" style="width: 60px;">
                                 <div class="input-group-append">
-                                    <button class="btn btn-primary btn-sm" (click)="addToCart(book.id)"
-                                        [disabled]="book.isAdded === true">
-                                        Add To Cart
+                                    <button class="btn btn-primary btn-sm" (click)="addToCart(book.id)" [disabled]="book.isAdded">
+                                        {{ book.isAdded ? 'Added' : 'Add To Cart' }}
                                     </button>
                                 </div>
                             </div>
@@ -148,6 +152,7 @@
             </div>
         </div>
     </div>
+    <!-- Pagination Controls -->
     <div class="d-flex justify-content-center mt-4">
         <pagination-controls (pageChange)="renderPage($event)"></pagination-controls>
     </div>
