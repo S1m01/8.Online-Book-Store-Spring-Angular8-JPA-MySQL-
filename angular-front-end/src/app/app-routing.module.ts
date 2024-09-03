@@ -7,11 +7,12 @@ import { CartListComponent } from './cart/cart.list.component';
 import { PageNotFoundComponent } from './page.not.found.component';
 import { LoginComponent } from './authentication/login.component';
 import { UserGuard } from './authentication/user.guard';
+import { BookGuard } from './authentication/book.guard';
 
 
 const routes: Routes = [
   { path: 'admin/users', component: UsersComponent, canActivate: [UserGuard] },
-  { path: 'admin/books', component: BooksComponent },
+  { path: 'admin/books', component: BooksComponent, canActivate: [BookGuard] },
   { path: 'cart', component: CartListComponent },
   { path: 'shop', component: ShopbookComponent },
   { path: 'login', component: LoginComponent },

@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 @Injectable({
    providedIn: 'root'
 })
-export class UserGuard implements CanActivate {
+export class BookGuard implements CanActivate {
 
    constructor(private router: Router) { }
 
@@ -31,19 +31,19 @@ export class UserGuard implements CanActivate {
             if (user && user.type === 'ADM') {
                if (url === '/login') {
                   // Reindirizza a un'area specifica per l'amministratore
-                  console.log("Redirecting to /admin/users");
-                  return this.router.parseUrl('/admin/users');
+                  console.log("Redirecting to /admin/books");
+                  return this.router.parseUrl('/admin/books');
                }
                // Permetti l'accesso per il tipo ADM
                return true;
             } else if (user) {
                // Non è un amministratore
-               if (url === '/admin/users') {
+               if (url === '/admin/books') {
                   console.log("Redirecting to /shop");
                   window.alert('You are not authorized')
                   return this.router.parseUrl('/shop'); // o qualsiasi altra route per accesso negato
                }
-               return true;
+                return true;
             } else {
                // Se l'oggetto user è nullo, reindirizza alla pagina di login
                console.log("Redirecting to /login");
@@ -58,6 +58,7 @@ export class UserGuard implements CanActivate {
       } else {
          // Se non ci sono dati utente, reindirizza alla pagina di login
          console.log("Redirecting to /login per mancanza di dati utente");
+         
          return this.router.parseUrl('/login');
       }
    }
